@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="containers"
+    targetNamespace="http://schemas.bdbxml.net/api/v1/containers.xsd"
+           xmlns:xrx="http://schemas.bdbxml.net/api/v1/containers.xsd"
+    elementFormDefault="unqualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:complexType name="ContainerElementCollectionType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Container" type="xrx:ContainerElementType">
+        <xs:annotation>
+          <xs:documentation>The configuration properties for opening/creating a Container object.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="ConfigurationState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="On"/>
+      <xs:enumeration value="Off"/>
+      <xs:enumeration value="UseDefault"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="XmlContainerType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NodeContainer"/>
+      <xs:enumeration value="WholeDocContainer"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ContainerElementType">
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>Required. The name of the container to create.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="alias" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>Optional. The container alias as used in XQuery expressions. If not provided, the container name (without the .dbxml extension) will be used.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="compression" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Determines compression is enabled for the container.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sequenceIncrement" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>The integer increment used when pre-allocating IDs at document creation.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="readUncommitted" default="false" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>The ability to do dirty container reads.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="encrypted" use="optional" default="false" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Determines whether or not to enable container encryption.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="allowValidation" use="optional" default="false" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Determines whether or not to validate XML if it refers to a DTD or schema.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="statistics" use="optional" type="xrx:ConfigurationState" default="UseDefault">
+      <xs:annotation>
+        <xs:documentation>Determines whether or not to enable container statistics.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="indexNodes" use="optional" type="xrx:ConfigurationState" default="UseDefault">
+      <xs:annotation>
+        <xs:documentation>Determines whether or not to enable document or node indexing.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="transactional" use="optional" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Determines whether or not the container is configured for transactions.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="allowCreate" use="optional" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation>Determines a container can be created if it does not already exist.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="multiVersion" use="optional" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Determines the database will be opened with support for Multiversion concurrency control (MVCC). This will cause updates to  the container to follow a copy-on-write protocol which is required to support snapshot isolation. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="exclusiveCreate" use="optional" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Determines whether or not to throw exceptions if the container already exists when trying to create another instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noMMap" use="optional" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Determines whether or not to create the container as an in-memory container instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="threaded" use="optional" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Determines the container handle is free-threaded. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="transactionNotDurable" use="optional" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>The transaction durability.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="containerType" use="optional" type="xrx:XmlContainerType" default="WholeDocContainer">
+      <xs:annotation>
+        <xs:documentation>The container type.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="Containers" type="xrx:ContainerElementCollectionType">
+    <xs:annotation>
+      <xs:documentation>Gets or sets the container element collection.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+</xs:schema>

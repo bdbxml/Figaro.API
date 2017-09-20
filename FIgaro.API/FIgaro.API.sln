@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Figaro.API", "Figaro.API.csproj", "{4F0DEE1E-EA12-438E-A348-9D8EF923B157}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Figaro.API.Test", "..\Figaro.API.Test\Figaro.API.Test.csproj", "{A2B09DC7-EAD4-4995-BD36-67FB46696C72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Debug|x64.ActiveCfg = Debug|x64
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Debug|x64.Build.0 = Debug|x64
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Release|x64.ActiveCfg = Release|x64
+		{4F0DEE1E-EA12-438E-A348-9D8EF923B157}.Release|x64.Build.0 = Release|x64
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Debug|x64.ActiveCfg = Debug|x64
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Debug|x64.Build.0 = Debug|x64
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Release|x64.ActiveCfg = Release|x64
+		{A2B09DC7-EAD4-4995-BD36-67FB46696C72}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FAFBA891-C41C-4F0A-8A79-E5303F6124DF}
+	EndGlobalSection
+EndGlobal

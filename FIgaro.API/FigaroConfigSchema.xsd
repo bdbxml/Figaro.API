@@ -1,0 +1,900 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:tns="http://schemas.bdbxml.net/configuration/6.0/HA" elementFormDefault="qualified" targetNamespace="http://schemas.bdbxml.net/configuration/6.0/HA" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense">
+  <xs:simpleType name="small_boolean_Type">
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="false" />
+      <xs:enumeration value="true" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="boolean_Type">
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="false" />
+      <xs:enumeration value="true" />
+      <xs:enumeration value="True" />
+      <xs:enumeration value="False" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ManagerInitOptions">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AllowExternalAccess"/>
+          <xs:enumeration value="AllowAutoOpen" />
+          <xs:enumeration value="AdoptFigaroEnv" />
+          <xs:enumeration value="AllOptions" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+  <xs:simpleType name="DeadlockDetectType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default"/>
+      <xs:enumeration value="Expir"/>
+      <xs:enumeration value="MaxLocks"/>
+      <xs:enumeration value="MaxWrite"/>
+      <xs:enumeration value="MinLocks"/>
+      <xs:enumeration value="MinWrite"/>
+      <xs:enumeration value="Oldest"/>
+      <xs:enumeration value="Random"/>
+      <xs:enumeration value="Youngest"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="EnvOpenOptions">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <!--<xs:enumeration value="InitReplication"/>-->
+          <xs:enumeration value="InitTransaction"/>
+          <xs:enumeration value="TransactionDefaults"/>
+          <xs:enumeration value="Recover"/>
+          <xs:enumeration value="RecoverFatal"/>
+          <xs:enumeration value="Register"/>
+          <xs:enumeration value="InitLock"/>
+          <xs:enumeration value="InitLog"/>
+          <xs:enumeration value="Create"/>
+          <xs:enumeration value="UseEnvironment"/>
+          <xs:enumeration value="UseEnvironmentRoot"/>
+          <xs:enumeration value="Thread"/>
+          <xs:enumeration value="SystemSharedMem"/>
+          <xs:enumeration value="Private"/>
+          <xs:enumeration value="InitConcurrentDataStore"/>
+          <xs:enumeration value="Lockdown"/>
+          <xs:enumeration value="InitMemoryBufferPool"/>
+          <xs:enumeration value="ConcurrentDataStoreDefaults"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+  <xs:simpleType name="EnvConfigOptions">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="AutoCommit"/>
+      <xs:enumeration value="AutoLogRemove"/>
+      <xs:enumeration value="DirectDB"/>
+      <xs:enumeration value="DirectLog"/>
+      <xs:enumeration value="SyncDB"/>
+      <xs:enumeration value="SyncLog"/>
+      <xs:enumeration value="LogInMemory"/>
+      <xs:enumeration value="MultiVersion"/>
+      <xs:enumeration value="NoLocking"/>
+      <xs:enumeration value="NoProcessMemoryMap"/>
+      <xs:enumeration value="NoPanic"/>
+      <xs:enumeration value="NoSyncTransaction"/>
+      <xs:enumeration value="NoWaitTransaction"/>
+      <xs:enumeration value="Overwrite"/>
+      <xs:enumeration value="PanicEnvironment"/>
+      <xs:enumeration value="SnapshotTransaction"/>
+      <xs:enumeration value="RegionInit"/>
+      <xs:enumeration value="TimeNotGranted"/>
+      <xs:enumeration value="WriteNoSyncTransaction"/>
+      <xs:enumeration value="YieldCpu"/>
+      <xs:enumeration value="AllConcurrentDatabases"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="LogConfigurationCategory">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="None"/>
+          <xs:enumeration value="Indexer"/>
+          <xs:enumeration value="Query"/>
+          <xs:enumeration value="Optimizer"/>
+          <xs:enumeration value="Dictionary"/>
+          <xs:enumeration value="Container"/>
+          <xs:enumeration value="NodeStore"/>
+          <xs:enumeration value="XmlManager"/>
+          <xs:enumeration value="All"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+  <xs:simpleType name="LogConfigurationLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Debug"/>
+      <xs:enumeration value="Info"/>
+      <xs:enumeration value="Warning"/>
+      <xs:enumeration value="Error" />
+      <xs:enumeration value="All" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="EnvLogOptions">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Direct"/>
+          <xs:enumeration value="DSync"/>
+          <xs:enumeration value="AutoRemove"/>
+          <xs:enumeration value="InMemory"/>
+          <xs:enumeration value="Zero"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+  <xs:simpleType name="ConfigurationState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="On"/>
+      <xs:enumeration value="Off"/>
+      <xs:enumeration value="UseDefault"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="XmlContainerType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NodeContainer"/>
+      <xs:enumeration value="WholeDocContainer"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Figaro" type="tns:Figaro.Configuration.FigaroSectionCT" />
+  <xs:complexType name="Figaro.Configuration.FigaroSectionCT">
+      <xs:all>
+        <xs:element minOccurs="0" name="Environments" type="tns:Figaro.Configuration.EnvElementCollectionCT">
+          <xs:annotation>
+            <xs:documentation>Gets or sets the environment element collection.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" name="Managers" type="tns:Figaro.Configuration.ManagerElementCollectionCT">
+          <xs:annotation>
+            <xs:documentation>Gets or sets the manager element collection.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" name="DefaultContainerSettings" type="tns:Figaro.Configuration.DefaultContainerElementCT">
+          <xs:annotation>
+            <xs:documentation>Default container settings set at the assembly level.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:all>
+</xs:complexType>
+  <xs:complexType name="Figaro.Configuration.EnvElementCollectionCT">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FigaroEnv" type="tns:Figaro.Configuration.FigaroEnvElementCT">
+        <xs:annotation>
+          <xs:documentation>Configure a FigaroEnv instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.ManagerElementCollectionCT">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="XmlManager" type="tns:Figaro.Configuration.ManagerElementCT">
+        <xs:annotation>
+          <xs:documentation>Configuration properties for an XmlManager instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.ContainerElementCollectionCT">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Container" type="tns:Figaro.Configuration.ContainerElementCT">
+        <xs:annotation>
+          <xs:documentation>The configuration properties for opening and/or creating a Container object.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.FigaroEnvElementCT">
+    <xs:all>
+      <xs:element minOccurs="0" name="DataDirectories" type="tns:Figaro.Configuration.DataDirectoryElementCollectionCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the collection of data directories used by the FigaroEnv instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Tracing" type="tns:Figaro.Configuration.TraceConfigurationElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets tracing configuration for the Figaro XML Database environment.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Encryption" type="tns:Figaro.Configuration.EncryptionElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the encryption settings for the configured environment instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Log" type="tns:Figaro.Configuration.LogElementCT">
+        <xs:annotation>
+          <xs:documentation>Transaction log settings for the FigaroEnv instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="MemoryFileMap" type="tns:Figaro.Configuration.MemoryFileMapElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the memory file map settings for the FigaroEnv instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Cache" type="tns:Figaro.Configuration.CacheElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the Cache configuration settings for the configured environment instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="CacheMax" type="tns:Figaro.Configuration.CacheMaxElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the maximum cache configuration for the environment instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Open" type="tns:Figaro.Configuration.OpenElementCT">
+        <xs:annotation>
+          <xs:documentation>The Open.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="TempDirectory" type="tns:Figaro.Configuration.TempDirectoryElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the temporary directory settings for the configured environment instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Transactions" type="tns:Figaro.Configuration.TransactionsElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the transaction subsystem settings of the environment instance. </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Locking" type="tns:Figaro.Configuration.LockingElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the locking subsystem configuration settings.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Mutex" type="tns:Figaro.Configuration.MutexElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets advanced environment mutex configuration settings.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="EnvConfig" type="tns:Figaro.Configuration.EnvConfigElementCollectionCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the collection of environment configuration settings to enable or disable.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" use="required" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>The environment configuration instance name.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="threadCount" use="optional" type="xs:byte">
+      <xs:annotation>
+        <xs:documentation>The estimated thread count for the FigaroEnv instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.DataDirectoryElementCollectionCT">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Directory" type="tns:Figaro.Configuration.DataDirectoryElementCT">
+        <xs:annotation>
+          <xs:documentation>The configuration element containing data directory paths to configure for the configured Figaro object instances.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.DataDirectoryElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="path" use="required" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the data directory to add.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="create" default="false" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>
+          Gets/sets whether to create the directories if they don't exist.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.ManagerElementCT">
+    <xs:all>
+      <xs:element minOccurs="0" name="DefaultContainerSettings" type="tns:Figaro.Configuration.DefaultContainerElementCT">
+        <xs:annotation>
+          <xs:documentation>The default container settings.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Containers" type="tns:Figaro.Configuration.ContainerElementCollectionCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the container element collection.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Queries" type="tns:Figaro.Configuration.QueryCollectionElementCT">
+        <xs:annotation>
+          <xs:documentation>Gets or sets the collection of QueryContext item configuration available for preparing and executing queries.</xs:documentation>
+        </xs:annotation>
+      </xs:element>      
+    </xs:all>
+    <xs:attribute name="name" use="required" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets the name of the XmlManager configuration instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="env" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the name of a configured environment instance to use in the manager instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="options" use="optional" type="tns:ManagerInitOptions">
+      <xs:annotation>
+        <xs:documentation>Gets or sets manager initialization options.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultContainerType" use="optional" type="tns:XmlContainerType">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the default container type (Node or Wholedoc) when creating new containers</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultPageSize" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the default page size, in bytes, for containers created by this manager instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultSequenceIncrement" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the default integer increment used when pre-allocating IDs at document creation.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.ContainerElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="name" use="required" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets the name of the Container configuration instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="alias" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the container alias used in XQuery expressions.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="compression" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether compression is enabled for the container.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sequenceIncrement" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the integer increment used when pre-allocating IDs at document creation.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pageSize" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the container page size, in bytes.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="checksum" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether to do checksum verification of pages read into the cache from the backing file store. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="readUncommitted" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the ability to do dirty container reads.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="encrypted" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether to enable container encryption.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="allowValidation" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether to validate XML if it refers to a DTD or schema.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="statistics" use="optional" type="tns:ConfigurationState">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether to enable container statistics.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="indexNodes" use="optional" type="tns:ConfigurationState">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not to enable document or node indexing.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="transactional" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not the container is configured for transactions.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="allowCreate" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether a container can be created if it does not already exist.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="multiVersion" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether the database will be opened with support for Multiversion concurrency control (MVCC). This will cause updates to  the container to follow a copy-on-write protocol which is required to support snapshot isolation. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="exclusiveCreate" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not to throw exceptions if the container already exists when trying to create another instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noMMap" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not the container will be mapped to process memory.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="readOnly" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether the container is configured for read-only access.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="threaded" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether the container handle is free-threaded. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="transactionNotDurable" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets transaction durability.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="containerType" use="optional" type="tns:XmlContainerType">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the container type.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="path" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the path and name of the configured container.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.TraceConfigurationElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="errorPrefix" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>
+          Gets or sets the error prefix to use in the error logging.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="category" use="optional" type="tns:LogConfigurationCategory">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the message category to trace.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="level" use="optional" type="tns:LogConfigurationLevel">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the message severity to trace.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="messageFile" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the path and file name of the message trace file, if configured.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="errorFile" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the path and file name of the error trace file, if configured.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.EncryptionElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="enabled" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Enables or disables encryption.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="password" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>The password used to access the containers within the configured environment.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.LogElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="bufferSize" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>
+          The maximum log buffer size for a configured environment instance.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="directory" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>The directory containing the environment's log files.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="create" default="false" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>
+          Gets/sets whether to create the directory if it doesn't exist.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="maxFileSize" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>The maximum log file size, in bytes.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="maxRegionSize" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>The maximum log region size, in bytes.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="logOptions" use="optional" type="tns:EnvLogOptions">
+      <xs:annotation>
+        <xs:documentation>Configuration options for the logging subsystem.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.MemoryFileMapElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="maxFileMapSize" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the maximum size, in bytes, for the memory file configuration.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="maxFileDescriptors" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>The maximum number of file descriptors that can be concurrently opened by the library when flushing dirty pages from the cache.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="maxWriteOperations" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>The maximum number of concurrent write operations opened by the library when flushing dirty pages from the cache.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="writeSleep" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>The number of microseconds a thread should pause before scheduling further write operations. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.CacheElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="bytes" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the number of bytes in the cache.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="gigaBytes" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the number of gigabytes in the cache.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="regions" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the number of regions in a cache.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.CacheMaxElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="bytes" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the maximum number of bytes in the environment cache.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="gigaBytes" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the maximum number of gigabytes in the environment cache.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.OpenElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="options" use="required" type="tns:EnvOpenOptions">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the options specified at environment open.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="home" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the environment's home directory.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="create" default="false" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>
+          Gets/sets whether to create the directory if it doesn't exist.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.TempDirectoryElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="path" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the path to the temporary directory used by the environment instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="create" default="false" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>
+          Gets/sets whether to create the directory if it doesn't exist.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.TransactionsElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="maxTransactions" use="optional" type="xs:unsignedShort">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the maximum number of simultaneous transactions running in an environment instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="timeout" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the configured transaction timeout, in microseconds.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.LockingElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="autoDetect" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the deadlock detection policy used to auto-detect deadlocks within the environment.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="timeout" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the deadlock timeout value, in microseconds.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="maxLocks" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the maximum number of locks supported by the environment instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="maxLockers" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation> Gets or sets the maximum number of locking entities supported by the environment instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="maxLockObjects" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the maximum lock objects for the environment instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="partitions" use="optional" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the number of lock partitions for the environment instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.MutexElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="tasSpinCount" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the mutex test-and-set spin count.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="align" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets mutex alignment.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="increment" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the mutex increment.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.QueryElementCT">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Namespaces" type="tns:Figaro.Configuration.NamespaceElementCollectionCT">
+        <xs:annotation>
+          <xs:documentation>The namespaces used by the query expression.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="Variables" type="tns:Figaro.Configuration.VariableElementCollectionCT">
+        <xs:annotation>
+          <xs:documentation>The variables used by the query expression.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" use="required" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>The Name.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="queryPath" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the path to the XQuery module to execute.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="prepare" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether to prepare a query before executing.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.NamespaceElementCollectionCT">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:annotation>
+        <xs:documentation>Namespaces used by the XQuery expression.</xs:documentation>
+      </xs:annotation>
+      <xs:element name="add" type="tns:Figaro.Configuration.NamespaceElementCT" />
+      <xs:element name="remove" type="tns:Figaro.Configuration.NamespaceElementCT" />
+      <xs:element name="clear" maxOccurs="1" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.NamespaceElementCT">
+    <xs:attribute name="prefix" use="required" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the namespace prefix.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the namespace value.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.VariableElementCollectionCT">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:annotation>
+        <xs:documentation>Variables used by the XQuery expression.</xs:documentation>
+      </xs:annotation>
+      <xs:element name="add" type="tns:Figaro.Configuration.NamespaceElementCT" />
+      <xs:element name="remove" type="tns:Figaro.Configuration.NamespaceElementCT" />
+      <xs:element name="clear" maxOccurs="1" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.VariableElementCT">
+    <xs:annotation>
+      <xs:documentation>
+        The query variable.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" use="required" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the variable name.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value" use="optional" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the variable value.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.EnvConfigElementCollectionCT">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigItem" type="tns:Figaro.Configuration.EnvConfigElementCT">
+        <xs:annotation>
+          <xs:documentation>The environment configuration setting instance.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.EnvConfigElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="setting" use="required" type="tns:EnvConfigOptions">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the environment setting to enable or disable.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="enabled" use="required" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Enables or disables the environment setting.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.DefaultContainerElementCT">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="compression" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets container compression.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sequenceIncrement" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the integer increment used when pre-allocating IDs at document creation.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pageSize" use="optional" type="xs:unsignedInt">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the container page size.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="checksum" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>The Checksum.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="readUncommitted" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the ability to do dirty container reads.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="encrypted" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether the container is encrypted.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="allowValidation" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether to validate XML if it refers to a DTD or schema.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="statistics" use="optional" type="tns:ConfigurationState">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether to enable container statistics.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="indexNodes" use="optional" type="tns:ConfigurationState">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not to enable document or node indexing.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="transactional" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not the container is configured for transactions.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="allowCreate" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether a container can be created if it does not already exist.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="multiVersion" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether the database will be opened with support for Multiversion concurrency control (MVCC). This will cause updates to  the container to follow a copy-on-write protocol which is required to support snapshot isolation. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="exclusiveCreate" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not to throw exceptions if the container already exists when trying to create another instance.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noMMap" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether or not the container will be mapped to process memory.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="threaded" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether the container handle is free-threaded. </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="readOnly" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets whether the container is configured for read-only access.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="transactionNotDurable" use="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Gets or sets transaction durability.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="containerType" use="optional" type="tns:XmlContainerType">
+      <xs:annotation>
+        <xs:documentation>Gets or sets the container type.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Figaro.Configuration.QueryCollectionElementCT">
+    <xs:sequence>
+      <xs:element name="Query" type="tns:Figaro.Configuration.QueryElementCT" minOccurs="0" maxOccurs="unbounded" />        
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

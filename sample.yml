@@ -1,0 +1,427 @@
+swagger: '2.0'
+info:
+  description: 'Figaro API definition documentation. See the [README](https://github.com/bdbxml/Figaro.API/) for design notes.'
+  version: 1.0.0
+  title: Figaro API
+  # put the contact info for your development or API team
+  contact:
+    email: lucas.vogel@endpointsystems.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+
+paths:
+  /c:
+    get:
+      tags:
+        - developers
+      summary: summarizes existing container information and statistics
+      operationId: containerInfo
+      description: | 
+        You can pull info for all containers, or you can pass in a container name (or alias) parameter and get specific information for that container.
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: query
+          name: containerName
+          description: an optional container name or alias for lookup.
+          required: false
+          type: string
+      responses: 
+        200:
+          description: A collection of container information.
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/ContainerConfig'
+    put:
+      tags:
+        - developers
+      summary: creates a new container with the uploaded settings.
+      operationId: createContainer
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: body
+          name: containerCreate
+          description: Creates a new container.
+          schema:
+            $ref: '#/definitions/ContainerConfig'
+      responses: 
+        200:
+          description: Information regarding the container created.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/ContainerConfig'
+  /{container}/{name}:
+    post:
+      tags:
+        - developers
+      summary: uploads a new document into the specified container
+      operationId: putDocument
+      description: 'uploads the specified document and metadata into the container'
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: container
+          description: 'the container name or alias. '
+          required: true
+          type: string
+        - in: path
+          name: name
+          description: 'the document name. If no name is specified, the default document name is used.'
+          required: true
+          type: string
+      responses:
+        200:
+          description: document created successfully
+          schema:
+            type: string
+        409:
+          description: document already exists
+    put:
+      tags:
+        - developers
+      summary: update or replace an existing document
+      operationId: updateDocument
+      description: update or replace the existing document in the container
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: container
+          description: 'the container name or alias.'
+          required: true
+          type: string
+        - in: path
+          name: name
+          required: true
+          type: string
+          description: the document name
+        - in: query
+          name: clearMetadata
+          required: false
+          type: boolean
+          description: 'if true, the system will clear the existing document metadata before updating.'
+          
+      responses:
+        200:
+          description: document created successfully
+          schema:
+            type: string
+            description: The updated file name.
+        404:
+          description: document does not exist  
+    get:
+      tags:
+        - developers
+      summary: get an existing document, with document metadata in the header.
+      operationId: getDocument
+      description: the existing document in the container
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: container
+          description: 'the container name or alias.'
+          required: true
+          type: string
+        - in: path
+          name: name
+          required: true
+          type: string
+          description: the document name
+      responses:
+        200:
+          description: document found
+          schema:
+            type: string
+            description: The updated file name.
+        404:
+          description: document does not exist  
+      
+definitions:
+  ContainerConfig:
+    type: object
+    required: 
+      - name
+    properties:
+      name:
+        type: string
+        example: 'Inventory'
+      alias:
+        type: string
+      compression:
+        type: boolean
+      sequenceIncremement:
+        type: integer
+        format: unsigned-int
+      pageSize:
+        type: integer
+        format: unsigned-int
+      checksum:
+        type: boolean
+      readUncommitted:
+        type: boolean
+      encrypted:
+        type: boolean
+      encryptPass:
+        description: 'The optional password for encrypting a container. This will go into key vault storage.'
+        type: string
+      encryptAutoPass:
+        description: 'If true, automatically generates a secret for storage in a key vault.'
+        type: boolean
+      allowValidation:
+        type: boolean
+      statistics:
+        enum:
+          - On
+          - Off
+          - UseDefault
+      transactional:
+        type: boolean
+      multiVersion:
+        type: boolean
+      noMMap: 
+        type: boolean
+      readOnly:
+        type: boolean
+      threaded:
+        type: boolean
+      transactionNotDurable:
+        type: boolean
+      containerType:
+        enum:
+        - NodeContainer
+        - WholeDocContainer
+schemes:
+ - https
+ - httpswagger: '2.0'
+info:
+  description: 'Figaro API definition documentation. See the [README](https://github.com/bdbxml/Figaro.API/) for design notes.'
+  version: 1.0.0
+  title: Figaro API
+  # put the contact info for your development or API team
+  contact:
+    email: lucas.vogel@endpointsystems.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+
+paths:
+  /c:
+    get:
+      tags:
+        - developers
+      summary: summarizes existing container information and statistics
+      operationId: containerInfo
+      description: | 
+        You can pull info for all containers, or you can pass in a container name (or alias) parameter and get specific information for that container.
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: query
+          name: containerName
+          description: an optional container name or alias for lookup.
+          required: false
+          type: string
+      responses: 
+        200:
+          description: A collection of container information.
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/ContainerConfig'
+    put:
+      tags:
+        - developers
+      summary: creates a new container with the uploaded settings.
+      operationId: createContainer
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: body
+          name: containerCreate
+          description: Creates a new container.
+          schema:
+            $ref: '#/definitions/ContainerConfig'
+      responses: 
+        200:
+          description: Information regarding the container created.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/ContainerConfig'
+  /{container}/{name}:
+    post:
+      tags:
+        - developers
+      summary: uploads a new document into the specified container
+      operationId: putDocument
+      description: 'uploads the specified document and metadata into the container'
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: container
+          description: 'the container name or alias. '
+          required: true
+          type: string
+        - in: path
+          name: name
+          description: 'the document name. If no name is specified, the default document name is used.'
+          required: true
+          type: string
+      responses:
+        200:
+          description: document created successfully
+          schema:
+            type: string
+        409:
+          description: document already exists
+    put:
+      tags:
+        - developers
+      summary: update or replace an existing document
+      operationId: updateDocument
+      description: update or replace the existing document in the container
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: container
+          description: 'the container name or alias.'
+          required: true
+          type: string
+        - in: path
+          name: name
+          required: true
+          type: string
+          description: the document name
+        - in: query
+          name: clearMetadata
+          required: false
+          type: boolean
+          description: 'if true, the system will clear the existing document metadata before updating.'
+          
+      responses:
+        200:
+          description: document created successfully
+          schema:
+            type: string
+            description: The updated file name.
+        404:
+          description: document does not exist  
+    get:
+      tags:
+        - developers
+      summary: get an existing document, with document metadata in the header.
+      operationId: getDocument
+      description: the existing document in the container
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: container
+          description: 'the container name or alias.'
+          required: true
+          type: string
+        - in: path
+          name: name
+          required: true
+          type: string
+          description: the document name
+      responses:
+        200:
+          description: document found
+          schema:
+            type: string
+            description: The updated file name.
+        404:
+          description: document does not exist  
+      
+definitions:
+  ContainerConfig:
+    type: object
+    required: 
+      - name
+    properties:
+      name:
+        type: string
+        example: 'Inventory'
+      alias:
+        type: string
+      compression:
+        type: boolean
+      sequenceIncremement:
+        type: integer
+        format: unsigned-int
+      pageSize:
+        type: integer
+        format: unsigned-int
+      checksum:
+        type: boolean
+      readUncommitted:
+        type: boolean
+      encrypted:
+        type: boolean
+      encryptPass:
+        description: 'The optional password for encrypting a container. This will go into key vault storage.'
+        type: string
+      encryptAutoPass:
+        description: 'If true, automatically generates a secret for storage in a key vault.'
+        type: boolean
+      allowValidation:
+        type: boolean
+      statistics:
+        enum:
+          - On
+          - Off
+          - UseDefault
+      transactional:
+        type: boolean
+      multiVersion:
+        type: boolean
+      noMMap: 
+        type: boolean
+      readOnly:
+        type: boolean
+      threaded:
+        type: boolean
+      transactionNotDurable:
+        type: boolean
+      containerType:
+        enum:
+        - NodeContainer
+        - WholeDocContainer
+schemes:
+ - https
+ - http
